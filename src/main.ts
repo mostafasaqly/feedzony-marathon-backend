@@ -30,6 +30,14 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+  // Apply Bearer auth to every operation that has a security requirement
+  Object.values(document.paths).forEach((path: any) => {
+    Object.values(path).forEach((operation: any) => {
+      if (!operation.security) {
+        operation.security = [{ 'access-token': [] }];
+      }
+    });
+  });
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
