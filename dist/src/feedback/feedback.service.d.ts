@@ -1,10 +1,12 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { ServicesService } from '../services/services.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 export declare class FeedbackService {
     private readonly prisma;
     private readonly servicesService;
-    constructor(prisma: PrismaService, servicesService: ServicesService);
+    private readonly notificationsService;
+    constructor(prisma: PrismaService, servicesService: ServicesService, notificationsService: NotificationsService);
     submitFeedback(slug: string, dto: CreateFeedbackDto): Promise<{
         service: {
             id: string;

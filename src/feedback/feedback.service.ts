@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ServicesService } from '../services/services.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 
 const feedbackSelect = {
@@ -18,13 +19,14 @@ export class FeedbackService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly servicesService: ServicesService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async submitFeedback(slug: string, dto: CreateFeedbackDto) {
     const service = await this.prisma.service.findUnique({ where: { slug } });
     if (!service) throw new NotFoundException('Service not found');
 
-    return this.prisma.feedback.create({
+    const feedback = await this.prisma.feedback.create({
       data: {
         rating: dto.rating,
         comment: dto.comment ?? null,
@@ -32,6 +34,18 @@ export class FeedbackService {
       },
       select: feedbackSelect,
     });
+
+    try {
+      const title = `New feedback on ${service.name}`;
+      const commentPart =
+        dto.comment
+          ? ` and left a comment: "${dto.comment.slice(0, 60)}${dto.comment.length > 60 ? '...' : ''}"`
+          : '';
+      const message = `A client rated your service ${dto.rating}/5 stars${commentPart}`;
+      await this.notificationsService.createNotification(service.userId, title, message);
+    } catch {}
+
+    return feedback;
   }
 
   async getFeedbackByService(serviceId: string, userId: string) {

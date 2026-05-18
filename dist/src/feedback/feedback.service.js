@@ -13,6 +13,7 @@ exports.FeedbackService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const services_service_1 = require("../services/services.service");
+const notifications_service_1 = require("../notifications/notifications.service");
 const feedbackSelect = {
     id: true,
     rating: true,
@@ -25,15 +26,17 @@ const feedbackSelect = {
 let FeedbackService = class FeedbackService {
     prisma;
     servicesService;
-    constructor(prisma, servicesService) {
+    notificationsService;
+    constructor(prisma, servicesService, notificationsService) {
         this.prisma = prisma;
         this.servicesService = servicesService;
+        this.notificationsService = notificationsService;
     }
     async submitFeedback(slug, dto) {
         const service = await this.prisma.service.findUnique({ where: { slug } });
         if (!service)
             throw new common_1.NotFoundException('Service not found');
-        return this.prisma.feedback.create({
+        const feedback = await this.prisma.feedback.create({
             data: {
                 rating: dto.rating,
                 comment: dto.comment ?? null,
@@ -41,6 +44,16 @@ let FeedbackService = class FeedbackService {
             },
             select: feedbackSelect,
         });
+        try {
+            const title = `New feedback on ${service.name}`;
+            const commentPart = dto.comment
+                ? ` and left a comment: "${dto.comment.slice(0, 60)}${dto.comment.length > 60 ? '...' : ''}"`
+                : '';
+            const message = `A client rated your service ${dto.rating}/5 stars${commentPart}`;
+            await this.notificationsService.createNotification(service.userId, title, message);
+        }
+        catch { }
+        return feedback;
     }
     async getFeedbackByService(serviceId, userId) {
         await this.servicesService.findOne(serviceId, userId);
@@ -83,6 +96,7 @@ exports.FeedbackService = FeedbackService;
 exports.FeedbackService = FeedbackService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        services_service_1.ServicesService])
+        services_service_1.ServicesService,
+        notifications_service_1.NotificationsService])
 ], FeedbackService);
 //# sourceMappingURL=feedback.service.js.map
