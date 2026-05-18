@@ -1,8 +1,11 @@
 import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import { IsIn, IsString } from 'class-validator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BillingService } from './billing.service';
 
 class ChangePlanDto {
+  @IsString()
+  @IsIn(['Free', 'Pro'])
   planName: 'Free' | 'Pro';
 }
 

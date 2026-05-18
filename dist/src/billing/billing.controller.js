@@ -14,11 +14,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BillingController = void 0;
 const common_1 = require("@nestjs/common");
+const class_validator_1 = require("class-validator");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const billing_service_1 = require("./billing.service");
 class ChangePlanDto {
     planName;
 }
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsIn)(['Free', 'Pro']),
+    __metadata("design:type", String)
+], ChangePlanDto.prototype, "planName", void 0);
 let BillingController = class BillingController {
     billingService;
     constructor(billingService) {
