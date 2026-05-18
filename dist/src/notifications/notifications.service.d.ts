@@ -7,16 +7,16 @@ export declare class NotificationsService {
         id: string;
         createdAt: Date;
         title: string;
-        message: string;
         userId: string;
+        message: string;
         read: boolean;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     getAll(userId: string, filter?: Filter): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         createdAt: Date;
         title: string;
-        message: string;
         userId: string;
+        message: string;
         read: boolean;
     }[]>;
     getUnreadCount(userId: string): Promise<{
@@ -26,8 +26,8 @@ export declare class NotificationsService {
         id: string;
         createdAt: Date;
         title: string;
-        message: string;
         userId: string;
+        message: string;
         read: boolean;
     }>;
     markAllAsRead(userId: string): Promise<{
@@ -37,8 +37,8 @@ export declare class NotificationsService {
         id: string;
         createdAt: Date;
         title: string;
-        message: string;
         userId: string;
+        message: string;
         read: boolean;
     }[]>;
 }

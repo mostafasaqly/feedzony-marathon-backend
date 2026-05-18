@@ -8,9 +8,9 @@ export declare class AuthController {
         access_token: string;
         user: {
             id: string;
-            email: string;
             name: string;
             createdAt: Date;
+            email: string;
             updatedAt: Date;
         };
     }>;
@@ -18,9 +18,9 @@ export declare class AuthController {
         access_token: string;
         user: {
             id: string;
-            email: string;
             name: string;
             createdAt: Date;
+            email: string;
             updatedAt: Date;
         };
     }>;

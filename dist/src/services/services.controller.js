@@ -16,6 +16,7 @@ exports.ServicesController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+const plan_limit_guard_1 = require("../billing/guards/plan-limit.guard");
 const services_service_1 = require("./services.service");
 const create_service_dto_1 = require("./dto/create-service.dto");
 const update_service_dto_1 = require("./dto/update-service.dto");
@@ -45,7 +46,8 @@ let ServicesController = class ServicesController {
 };
 exports.ServicesController = ServicesController;
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, plan_limit_guard_1.PlanLimitGuard),
+    (0, common_1.SetMetadata)('planFeature', 'createService'),
     (0, common_1.Post)('services'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new service' }),

@@ -47,12 +47,15 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const users_service_1 = require("../users/users.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 let AuthService = class AuthService {
     usersService;
     jwtService;
-    constructor(usersService, jwtService) {
+    prisma;
+    constructor(usersService, jwtService, prisma) {
         this.usersService = usersService;
         this.jwtService = jwtService;
+        this.prisma = prisma;
     }
     async register(dto) {
         const existing = await this.usersService.findByEmail(dto.email);
@@ -60,6 +63,15 @@ let AuthService = class AuthService {
             throw new common_1.ConflictException('Email already in use');
         const hashedPassword = await bcrypt.hash(dto.password, 10);
         const user = await this.usersService.createUser(dto.name, dto.email, hashedPassword);
+        try {
+            const freePlan = await this.prisma.plan.findUnique({ where: { name: 'Free' } });
+            if (freePlan) {
+                await this.prisma.subscription.create({
+                    data: { userId: user.id, planId: freePlan.id, status: 'active' },
+                });
+            }
+        }
+        catch { }
         const token = this.jwtService.sign({ sub: user.id, email: user.email });
         const { password, ...safeUser } = user;
         return { access_token: token, user: safeUser };
@@ -83,6 +95,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        prisma_service_1.PrismaService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

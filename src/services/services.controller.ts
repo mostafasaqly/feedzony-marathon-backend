@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Request,
+  SetMetadata,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -21,6 +22,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PlanLimitGuard } from '../billing/guards/plan-limit.guard';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -30,7 +32,8 @@ import { UpdateServiceDto } from './dto/update-service.dto';
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PlanLimitGuard)
+  @SetMetadata('planFeature', 'createService')
   @Post('services')
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Create a new service' })

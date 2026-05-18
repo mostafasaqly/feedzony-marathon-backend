@@ -15,6 +15,35 @@ model User {
   updatedAt     DateTime       @updatedAt
   services      Service[]
   notifications Notification[]
+  subscription  Subscription?
+}
+
+model Plan {
+  id               String         @id @default(cuid())
+  name             String         @unique
+  price            Float
+  maxServices      Int
+  maxFeedback      Int
+  hasAnalytics     Boolean        @default(false)
+  hasNotifications Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+
+  subscriptions    Subscription[]
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  planId               String
+  status               String    @default("active")
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan  Plan @relation(fields: [planId], references: [id])
 }
 
 model Notification {

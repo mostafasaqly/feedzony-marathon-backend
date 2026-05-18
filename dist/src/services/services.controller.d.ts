@@ -10,8 +10,8 @@ export declare class ServicesController {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         userId: string;
+        slug: string;
     }>;
     findAll(req: any): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
@@ -19,8 +19,8 @@ export declare class ServicesController {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         userId: string;
+        slug: string;
     }[]>;
     findOne(req: any, id: string): Promise<{
         id: string;
@@ -28,8 +28,8 @@ export declare class ServicesController {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         userId: string;
+        slug: string;
     }>;
     update(req: any, id: string, dto: UpdateServiceDto): Promise<{
         id: string;
@@ -37,8 +37,8 @@ export declare class ServicesController {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         userId: string;
+        slug: string;
     }>;
     remove(req: any, id: string): Promise<{
         message: string;
