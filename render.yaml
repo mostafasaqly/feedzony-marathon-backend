@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: feedzony-backend
+    runtime: node
+    plan: free
+    # postinstall runs `prisma generate`; render-build compiles Nest and
+    # applies pending migrations against DATABASE_URL.
+    buildCommand: npm install && npm run render-build
+    startCommand: npm run start:prod
+    healthCheckPath: /billing/plans
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: FRONTEND_URL
+        sync: false
+      - key: LEMON_SQUEEZY_API_KEY
+        sync: false
+      - key: LEMON_SQUEEZY_STORE_ID
+        sync: false
+      - key: LEMON_SQUEEZY_PRODUCT_ID
+        sync: false
+      - key: LEMON_SQUEEZY_VARIANT_ID
+        sync: false
+      - key: LEMON_SQUEEZY_WEBHOOK_SECRET
+        sync: false

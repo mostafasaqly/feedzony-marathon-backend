@@ -20,7 +20,11 @@
       "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Select-Object Id, StartTime, @{N='CmdLine';E={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}})",
       "PowerShell(@\\(4880, 28004, 29524, 30796\\) | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; \"Killed $_\" }; Start-Sleep -Seconds 2; netstat -ano | findstr \":3000\" | findstr \"LISTENING\")",
       "PowerShell(Start-Sleep -Seconds 3; $p = netstat -ano | findstr \":3000\" | findstr \"LISTENING\"; if \\($p\\) { \"STILL IN USE: $p\" } else { \"Port 3000 is FREE\" })",
-      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); ['LEMON_SQUEEZY_API_KEY','LEMON_SQUEEZY_STORE_ID','LEMON_SQUEEZY_PRODUCT_ID','LEMON_SQUEEZY_WEBHOOK_SECRET','FRONTEND_URL'].forEach\\(k=>{const v=process.env[k]; console.log\\(k+': '+\\(v?\\(v.length>8?v.slice\\(0,4\\)+'...\\('+v.length+' chars\\)':'SET'\\):'*** MISSING ***'\\)\\)}\\)\")"
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); ['LEMON_SQUEEZY_API_KEY','LEMON_SQUEEZY_STORE_ID','LEMON_SQUEEZY_PRODUCT_ID','LEMON_SQUEEZY_WEBHOOK_SECRET','FRONTEND_URL'].forEach\\(k=>{const v=process.env[k]; console.log\\(k+': '+\\(v?\\(v.length>8?v.slice\\(0,4\\)+'...\\('+v.length+' chars\\)':'SET'\\):'*** MISSING ***'\\)\\)}\\)\")",
+      "Bash(ls -la render.yaml Procfile nest-cli.json tsconfig*.json)",
+      "Bash(ls dist/)",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./package.json'\\).scripts, null, 2\\)\\)\")",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./package.json'\\).prisma, null, 2\\)\\)\")"
     ]
   }
 }
