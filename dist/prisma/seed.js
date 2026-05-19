@@ -18,9 +18,12 @@ async function main() {
             hasNotifications: false,
         },
     });
+    const proVariantId = process.env.LEMON_SQUEEZY_VARIANT_ID ||
+        process.env.LEMON_SQUEEZY_PRODUCT_ID ||
+        null;
     await prisma.plan.upsert({
         where: { name: 'Pro' },
-        update: {},
+        update: { lemonVariantId: proVariantId },
         create: {
             name: 'Pro',
             price: 12,
@@ -28,6 +31,7 @@ async function main() {
             maxFeedback: -1,
             hasAnalytics: true,
             hasNotifications: true,
+            lemonVariantId: proVariantId,
         },
     });
     console.log('Seed complete: Free and Pro plans upserted.');

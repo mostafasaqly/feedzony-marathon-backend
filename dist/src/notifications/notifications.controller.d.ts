@@ -7,8 +7,8 @@ export declare class NotificationsController {
         createdAt: Date;
         title: string;
         userId: string;
-        message: string;
         read: boolean;
+        message: string;
     }[]>;
     getUnreadCount(req: any): Promise<{
         count: number;
@@ -18,8 +18,8 @@ export declare class NotificationsController {
         createdAt: Date;
         title: string;
         userId: string;
-        message: string;
         read: boolean;
+        message: string;
     }[]>;
     markAllAsRead(req: any): Promise<{
         updated: number;
@@ -29,7 +29,7 @@ export declare class NotificationsController {
         createdAt: Date;
         title: string;
         userId: string;
-        message: string;
         read: boolean;
+        message: string;
     }>;
 }

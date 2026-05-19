@@ -26,21 +26,27 @@ model Plan {
   maxFeedback      Int
   hasAnalytics     Boolean        @default(false)
   hasNotifications Boolean        @default(false)
+  // Lemon Squeezy variant id used to create a checkout for this plan.
+  lemonVariantId   String?
   createdAt        DateTime       @default(now())
 
   subscriptions    Subscription[]
 }
 
 model Subscription {
-  id                   String    @id @default(cuid())
-  userId               String    @unique
-  planId               String
-  status               String    @default("active")
-  stripeCustomerId     String?
-  stripeSubscriptionId String?
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  id                     String    @id @default(cuid())
+  userId                 String    @unique
+  planId                 String
+  status                 String    @default("active")
+  // Lemon Squeezy identifiers, populated by webhook events.
+  lemonCustomerId        String?
+  lemonSubscriptionId    String?   @unique
+  lemonOrderId           String?
+  lemonVariantId         String?
+  cancelAtPeriodEnd      Boolean   @default(false)
+  currentPeriodEnd       DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 
   user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan  Plan @relation(fields: [planId], references: [id])

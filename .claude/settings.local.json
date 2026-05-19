@@ -10,7 +10,17 @@
       "Bash(netstat -ano)",
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen | Select-Object LocalAddress,LocalPort,OwningProcess | Format-Table; Get-NetTCPConnection -LocalPort 3000 -State Listen | ForEach-Object { Get-Process -Id $_.OwningProcess | Select-Object Id,ProcessName,Path })",
       "Bash(not exist *)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "PowerShell(npx prisma generate)",
+      "PowerShell(npx nest build)",
+      "Bash(node -e ' *)",
+      "Bash(Select-String -NotMatch \"Warning|SSL|libpq|sslmode|pg-connection|next major|prepare|uselibpq|See https|node --trace\")",
+      "PowerShell(netstat -ano)",
+      "PowerShell(Stop-Process -Id 31716 -Force)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Select-Object Id, StartTime, @{N='CmdLine';E={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}})",
+      "PowerShell(@\\(4880, 28004, 29524, 30796\\) | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; \"Killed $_\" }; Start-Sleep -Seconds 2; netstat -ano | findstr \":3000\" | findstr \"LISTENING\")",
+      "PowerShell(Start-Sleep -Seconds 3; $p = netstat -ano | findstr \":3000\" | findstr \"LISTENING\"; if \\($p\\) { \"STILL IN USE: $p\" } else { \"Port 3000 is FREE\" })",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); ['LEMON_SQUEEZY_API_KEY','LEMON_SQUEEZY_STORE_ID','LEMON_SQUEEZY_PRODUCT_ID','LEMON_SQUEEZY_WEBHOOK_SECRET','FRONTEND_URL'].forEach\\(k=>{const v=process.env[k]; console.log\\(k+': '+\\(v?\\(v.length>8?v.slice\\(0,4\\)+'...\\('+v.length+' chars\\)':'SET'\\):'*** MISSING ***'\\)\\)}\\)\")"
     ]
   }
 }

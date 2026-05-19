@@ -19,9 +19,16 @@ async function main() {
     },
   });
 
+  // Lemon Squeezy checkouts are created against a *variant* id (a product can
+  // have multiple variants). Falls back to PRODUCT_ID for backwards compat.
+  const proVariantId =
+    process.env.LEMON_SQUEEZY_VARIANT_ID ||
+    process.env.LEMON_SQUEEZY_PRODUCT_ID ||
+    null;
+
   await prisma.plan.upsert({
     where: { name: 'Pro' },
-    update: {},
+    update: { lemonVariantId: proVariantId },
     create: {
       name: 'Pro',
       price: 12,
@@ -29,6 +36,7 @@ async function main() {
       maxFeedback: -1,
       hasAnalytics: true,
       hasNotifications: true,
+      lemonVariantId: proVariantId,
     },
   });
 

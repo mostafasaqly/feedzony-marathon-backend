@@ -4,7 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // `rawBody: true` exposes the unparsed request body on `req.rawBody`,
+  // required to verify the Lemon Squeezy webhook HMAC signature.
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.enableCors({
     origin: process.env.FRONTEND_URL ?? 'http://localhost:4200',

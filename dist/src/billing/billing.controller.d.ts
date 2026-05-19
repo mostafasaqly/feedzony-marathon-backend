@@ -1,10 +1,13 @@
+import type { Request } from 'express';
 import { BillingService } from './billing.service';
-declare class ChangePlanDto {
-    planName: 'Free' | 'Pro';
+import { LemonSqueezyService } from './lemon-squeezy.service';
+declare class CheckoutDto {
+    planName: string;
 }
 export declare class BillingController {
     private readonly billingService;
-    constructor(billingService: BillingService);
+    private readonly lemon;
+    constructor(billingService: BillingService, lemon: LemonSqueezyService);
     getPlans(): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         name: string;
@@ -13,6 +16,7 @@ export declare class BillingController {
         maxFeedback: number;
         hasAnalytics: boolean;
         hasNotifications: boolean;
+        lemonVariantId: string | null;
         createdAt: Date;
     }[]>;
     getMyPlan(req: any): Promise<{
@@ -24,15 +28,19 @@ export declare class BillingController {
             maxFeedback: number;
             hasAnalytics: boolean;
             hasNotifications: boolean;
+            lemonVariantId: string | null;
             createdAt: Date;
         };
     } & {
         id: string;
+        lemonVariantId: string | null;
         createdAt: Date;
         updatedAt: Date;
         status: string;
-        stripeCustomerId: string | null;
-        stripeSubscriptionId: string | null;
+        lemonCustomerId: string | null;
+        lemonSubscriptionId: string | null;
+        lemonOrderId: string | null;
+        cancelAtPeriodEnd: boolean;
         currentPeriodEnd: Date | null;
         userId: string;
         planId: string;
@@ -48,6 +56,8 @@ export declare class BillingController {
         };
         subscription: {
             status: string;
+            cancelAtPeriodEnd: boolean;
+            currentPeriodEnd: string | null;
             createdAt: string;
         };
         usage: {
@@ -57,7 +67,10 @@ export declare class BillingController {
             feedbackLimit: number;
         };
     }>;
-    changePlan(req: any, body: ChangePlanDto): Promise<{
+    createCheckout(req: any, body: CheckoutDto): Promise<{
+        checkoutUrl: string;
+    }>;
+    cancelSubscription(req: any): Promise<{
         plan: {
             id: string;
             name: string;
@@ -66,18 +79,25 @@ export declare class BillingController {
             maxFeedback: number;
             hasAnalytics: boolean;
             hasNotifications: boolean;
+            lemonVariantId: string | null;
             createdAt: Date;
         };
     } & {
         id: string;
+        lemonVariantId: string | null;
         createdAt: Date;
         updatedAt: Date;
         status: string;
-        stripeCustomerId: string | null;
-        stripeSubscriptionId: string | null;
+        lemonCustomerId: string | null;
+        lemonSubscriptionId: string | null;
+        lemonOrderId: string | null;
+        cancelAtPeriodEnd: boolean;
         currentPeriodEnd: Date | null;
         userId: string;
         planId: string;
+    }>;
+    handleWebhook(req: Request, signature: string): Promise<{
+        handled: boolean;
     }>;
 }
 export {};
