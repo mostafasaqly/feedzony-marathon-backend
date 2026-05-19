@@ -7,7 +7,7 @@ const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { rawBody: true });
     app.enableCors({
-        origin: process.env.FRONTEND_URL ?? 'http://localhost:4200',
+        origin: true,
         credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
@@ -32,8 +32,9 @@ async function bootstrap() {
     swagger_1.SwaggerModule.setup('api/docs', app, document, {
         swaggerOptions: { persistAuthorization: true },
     });
-    await app.listen(process.env.PORT ?? 3000);
-    console.log(`Swagger docs: http://localhost:${process.env.PORT ?? 3000}/api/docs`);
+    const port = process.env.PORT || 3000;
+    await app.listen(port, '0.0.0.0');
+    console.log(`Swagger docs: http://localhost:${port}/api/docs`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
